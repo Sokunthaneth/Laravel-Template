@@ -15,6 +15,20 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::group(['prefix' => 'company'], function () {
+  Route::get('/login', 'CompanyAuth\LoginController@showLoginForm')->name('login');
+  Route::post('/login', 'CompanyAuth\LoginController@login');
+  Route::post('/logout', 'CompanyAuth\LoginController@logout')->name('logout');
+
+  Route::get('/register', 'CompanyAuth\RegisterController@showRegistrationForm')->name('register');
+  Route::post('/register', 'CompanyAuth\RegisterController@register');
+
+  Route::post('/password/email', 'CompanyAuth\ForgotPasswordController@sendResetLinkEmail')->name('password.request');
+  Route::post('/password/reset', 'CompanyAuth\ResetPasswordController@reset')->name('password.email');
+  Route::get('/password/reset', 'CompanyAuth\ForgotPasswordController@showLinkRequestForm')->name('password.reset');
+  Route::get('/password/reset/{token}', 'CompanyAuth\ResetPasswordController@showResetForm');
+});
+
 Route::group(['prefix' => 'user'], function () {
   Route::get('/login', 'UserAuth\LoginController@showLoginForm')->name('login');
   Route::post('/login', 'UserAuth\LoginController@login');

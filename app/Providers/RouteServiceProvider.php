@@ -39,6 +39,8 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
+        $this->mapCompanyRoutes();
+
         $this->mapUserRoutes();
 
         //
@@ -60,6 +62,25 @@ class RouteServiceProvider extends ServiceProvider
             'namespace' => $this->namespace,
         ], function ($router) {
             require base_path('routes/user.php');
+        });
+    }
+
+    /**
+     * Define the "company" routes for the application.
+     *
+     * These routes all receive session state, CSRF protection, etc.
+     *
+     * @return void
+     */
+    protected function mapCompanyRoutes()
+    {
+        Route::group([
+            'middleware' => ['web', 'company', 'auth:company'],
+            'prefix' => 'company',
+            'as' => 'company.',
+            'namespace' => $this->namespace,
+        ], function ($router) {
+            require base_path('routes/company.php');
         });
     }
 
